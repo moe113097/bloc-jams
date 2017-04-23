@@ -57,6 +57,9 @@ z-index: 1;
 .links-container .navbar-link:hover{
   color: rgb(233,50,117);
 }
+.links-container .navbar-link:active{
+  background-color: white;
+}
 body{
   font-family: 'Open Sans';
   color: white;
@@ -79,7 +82,7 @@ body{
   .column.two-thirds{width: 66.7%}
   .column.half{width: 50%}
   .column.third{width:33.3%}
-  .colum.fourth{width: 25%}
+  .column.fourth{width: 25%}
   .column.flow-opposite{float:right;}
 
 
