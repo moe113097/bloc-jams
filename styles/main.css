@@ -69,6 +69,16 @@ body{
   margin: 0 auto;
   max-width: 64rem;
 }
+
+.container{
+  margin:0 auto;
+  max-width: 64rem;
+
+}
+/*below is messing up alignment*/
+.container .narrow {
+  max-width: 56rem;
+}  
 /* Medium and small screens (640px) */
 @media (min-width: 640px){
   html {font-size: 112%}
@@ -101,4 +111,7 @@ body{
 
 .clearfix::after{
   clear:both;
+}
+
+
 }
