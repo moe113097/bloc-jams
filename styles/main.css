@@ -57,9 +57,9 @@ z-index: 1;
 .links-container .navbar-link:hover{
   color: rgb(233,50,117);
 }
-/*.links-container .navbar-link:active{
+.links-container .navbar-link:active{
   background-color: white;
-}*/
+}
 body{
   font-family: 'Open Sans';
   color: white;
