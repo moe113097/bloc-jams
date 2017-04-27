@@ -2,16 +2,17 @@ var animatePoints = function(){
 
   var points=document.getElementsByClassName('point');
 
-  var revealPoint=function(){
-    for (var i=0;i<points.length;i++){
-      points[i].style.opacity=1;
-      points[i].style.transform="scaleX(1) translateY(0)";
-      points[i].style.msTransform="scaleX(1) translateY(0)";
-      points[i].style.WebkitTransform="scaleX(1) translateY(o)";
-    };
+  var revealPoint=function(j){
+      points[j].style.opacity=1;
+      points[j].style.transform="scaleX(1) translateY(0)";
+      points[j].style.msTransform="scaleX(1) translateY(0)";
+      points[j].style.WebkitTransform="scaleX(1) translateY(0)";
+    }
+        for (var i= 0; i < points.length; i++){
+            revealPoint(i);
   }
-    revealPoint();
-  };
+};
+
 
 /*  var revealFirstPoint=function(){
       points[0].style.opacity=1;
