@@ -15,7 +15,7 @@
 };
 
 //Another Example album
- var AlbumMarconi ={
+ var albumMarconi ={
      title:'The Telephone',
      artist:'Guglielmo Marconi',
      label: 'EM',
@@ -29,6 +29,22 @@
         {title: 'Wrong phone number', duration :'2:15'}
   ]
 };
+// my album Example
+var albumMcDonalds = {
+   title:'Big Mac',
+    artist:'Ronald McDonald',
+    label: 'Fast-Food',
+    year:'1954',
+    albumArtUrl: 'assets/images/album_covers/22.png',
+    songs: [
+       {title:'Quarter Pounder', duration: '4:26'},
+       {title:'Big Mac Delux', duration: '3:14'},
+       {title:'Egg McMuffin', duration: '5:01'},
+       {title:'Egg White Delight', duration: '3:21'},
+       {title:'McFlurry', duration: '2:15'},
+   ]
+};
+
 
 var createSongRow =function(songNumber, songName, songLength) {
     var template=
@@ -71,3 +87,15 @@ return template;
       setCurrentAlbum(albumPicasso);
 
   };
+
+function changeAlbum(){
+    var name = document.getElementsByClassName('album-view-title')[0].textContent;
+    if (name==='The Colors'){
+      setCurrentAlbum(albumMarconi);
+    } else if (name==='The Telephone') {
+      setCurrentAlbum(albumMcDonalds);
+
+    }else{
+      setCurrentAlbum(albumPicasso);
+    }
+  }
