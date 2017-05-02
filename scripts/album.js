@@ -49,7 +49,7 @@ var albumMcDonalds = {
 var createSongRow =function(songNumber, songName, songLength) {
     var template=
     '<tr class="album-view-song-item">'
-    +'  <td class="song=item-number">'+ songNumber + '</td>.'
+    +'  <td class="song=item-number">'+ songNumber + '</td>'
     +'  <td class="song-item-title">'+ songName+'</td>'
     +'  <td class="song-item-duration">' +songLength + '</td>'
     +'</tr>'
