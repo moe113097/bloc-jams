@@ -165,6 +165,7 @@ return template;
     });
           songRows[i].addEventListener('click',function(event){
         //event handler call
+        console.log("this is event.target.classname "+event.target.className)
         clickHandler(event.target);
       });
     }
