@@ -102,14 +102,14 @@ return template;
  var getSongItem = function(element) {
 
        switch (element.className) {
-          // console.log("switch element.className " + element.className);
+
           case 'album-song-button':
           case 'ion-play' :
-          case 'song-item-title':
+         case 'song-item-title':
           case 'ion-pause':
              return findParentByClassName(element,'song-item-number');
           case 'song-item-duration':
-          return findParentByClassName(element,'album-view-song-item').querySelector('song-item-number')
+       return findParentByClassName(element,'album-view-song-item').querySelector('song-item-number')
 
          case 'album-view-song-item':
           return element.querySelector('.song-item-number');
@@ -142,14 +142,18 @@ return template;
 
 
     songListContainer.addEventListener('mouseover', function(event){
-        // only target individual song rows during event delegation
-        if (event.target.parentElement.className==='album-view-song-item'){
-           var songItem = getSongItem(event.target);
+  
+           if (event.target.parentElement.className==='album-view-song-item'){
+              if (event.target.className ==='song-item-number'){
+             var songItem = getSongItem(event.target);
+
               if (songItem.getAttribute('data-song-number')!==currentlyPlayingSong){
             songItem.innerHTML=playButtonTemplate;
+
+          }
           }
          }
-          });
+       });
       for(var i =0;i<songRows.length;i++){
         songRows[i].addEventListener('mouseleave',function(event){
            var songItem = getSongItem(event.target);
