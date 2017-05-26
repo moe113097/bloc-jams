@@ -1,34 +1,4 @@
-//Example Album
- var albumPicasso = {
-    title:'The Colors',
-     artist:'Pable Picasso',
-     label: 'Cubism',
-     year:'1881',
-     albumArtUrl: 'assets/images/album_covers/01.png',
-     songs: [
-        {title:'Blue', duration: '4:26'},
-        {title:'Green', duration: '3:14'},
-        {title:'Red', duration: '5:01'},
-        {title:'Pink', duration: '3:21'},
-        {title:'Magenta', duration: '2:15'},
-    ]
-};
 
-//Another Example album
- var AlbumMarconi ={
-     title:'The Telephone',
-     artist:'Guglielmo Marconi',
-     label: 'EM',
-     year: '1909',
-     albumArtUrl: 'assets/images/album_covers/20.png',
-     songs:[
-        {title:'Hello, Operator?', duration:'1:01'},
-        {title: 'Ring, ring, ring', duration: '5:01'},
-        {title:'Fits in your pocket', duration:'3:21'},
-        {title:' Can you hear me now?', duration:'3:14'},
-        {title: 'Wrong phone number', duration :'2:15'}
-  ]
-};
 
 var createSongRow =function(songNumber, songName, songLength) {
     var template=
@@ -41,62 +11,136 @@ var createSongRow =function(songNumber, songName, songLength) {
     ;
 
 var $row=$(template);
+var updatePlayerBarSong = function(){
+currentSongFromAlbum =songName;
+    $('h2.song-name').text(currentSongFromAlbum);
+    $('h3.artist-name').text(currentAlbumArtist);
+    $('h2.artist-song-mobile').text(currentSongFromAlbum+" "+currentAlbumArtist); //forgot to add mobile version
+    $('.main-controls .play-pause').html(playerBarPauseButton)
+  };
+  var trackIndex = function(album, song) {
+    console.log("below is album.songs")
+    console.log(album.songs);
+    console.log("below is song")
+    console.log(song);
+
+    console.log(album.songs.indexOf(song));
+     return album.songs.indexOf(song);
+ };
+
+
+var nextSong = function() {
+    var length = currentAlbum.songs.length;
+    var currentSongIndex = trackIndex(currentAlbum ,currentSongFromAlbum);// this is causing issue since trackIndex not returning index
+        currentSongIndex ++;  //originally had after the if but not accurate test
+    if (currentSongIndex >= length){
+        currentSongIndex = 0;
+    }
+    var lastSongNumber = currentlyPlayingSongNumber; // did not consider this simple way of storing current number without any calculations
+    currentlyPlayingSongNumber = currentSongIndex +1;
+    currentSongFromAlbum= currentAlbum.songs[currentSongIndex]; // had .title at the end originally
+// once currentSongFromAlbum is stored can run updatePlayerBarSong();
+    updatePlayerBarSong();
+
+// orignally copied language from clickHandler else  but then realized after looking at the example that not only do I have to update the current to a
+//pause button but also have to change previous one to number again . I ended up using code example provided
+    var $nextSongNumberCell= $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber+'"]');
+    var $lastSongNumberCell= $('.song-item-number[data-song-number="' + lastSongNumber+'"]');
+
+    $nextSongNumberCell.html(pauseButtonTemplate);
+    $lastSongNumberCell.html(lastSongNumber);
+
+  };
+  var previousSong = function() {
+      var length = currentAlbum.songs.length;
+      var currentSongIndex = trackIndex(currentAlbum ,currentSongFromAlbum);// this is causing issue since trackIndex not returning index
+          currentSongIndex --;
+      if (currentSongIndex < 0){
+          currentSongIndex = length-1;
+      }
+      var lastSongNumber = currentlyPlayingSongNumber;
+      currentlyPlayingSongNumber = currentSongIndex +1;
+      currentSongFromAlbum= currentAlbum.songs[currentSongIndex];
+
+      updatePlayerBarSong();
+
+      $('.main-controls .play-pause').html(playerBarPauseButton); // did not consider this but was not told that previous action should pause the new song
+
+      var $previousSongNumberCell= $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber+'"]');
+      var $lastSongNumberCell= $('.song-item-number[data-song-number="' + lastSongNumber+'"]');
+
+      $previousSongNumberCell.html(pauseButtonTemplate);
+      $lastSongNumberCell.html(lastSongNumber);
+
+    };
+/* why can i click and run function from here but can't after document ready
+    $('span.ion-skip-backward').on('click',function(){
+      previousSong();
+    })
+    $('span.ion-skip-forward').on('click',function(){
+      nextSong();
+    })
+*/
 
 var clickHandler =function(){
-  var songNumberCell = $(this).closest('.album-view-song-item').find('.song-item-number');
-  var songItem = songNumberCell.attr('data-song-number');
-        if (currentlyPlayingSong === null){
-          songNumberCell.html(pauseButtonTemplate);
-          currentlyPlayingSong= songItem;
-      }
-      else if (currentlyPlayingSong===songItem){
-          songNumberCell.html(playButtonTemplate);
-          currentlyPlayingSong = null;
-      }
-      else if (currentlyPlayingSong !== songItem){
-            var currentlyPlayingCell= $('.song-item-number,[data-song-number="' +currentlyPlayingSong+'"]');// had issue defining lookup criteria for old song 
-            currentlyPlayingCell.html(currentlyPlayingSong);
+    var songNumberCell = $(this).closest('.album-view-song-item').find('.song-item-number');
+    var songNumber = parseInt(songNumberCell.attr('data-song-number'));
+
+        currentAlbumArtist = $('.album-view-artist').text();
+          if (currentlyPlayingSongNumber === null){
             songNumberCell.html(pauseButtonTemplate);
-            currentlyPlayingSong=songItem;
+            currentlyPlayingSongNumber= songNumber;
+            updatePlayerBarSong();
+
+
+      }
+        else if (currentlyPlayingSongNumber===songNumber){
+            songNumberCell.html(playButtonTemplate);
+            $('.main-controls .play-pause').html(playerBarPlayButton);
+            currentlyPlayingSongNumber = null;
+
+      }
+        else if (currentlyPlayingSongNumber !== songNumber){
+            var currentlyPlayingCell= $('.song-item-number[data-song-number="' +currentlyPlayingSongNumber+'"]');// had issue defining lookup criteria for old song
+              currentlyPlayingCell.html(currentlyPlayingSongNumber);
+              songNumberCell.html(pauseButtonTemplate);
+              currentlyPlayingSongNumber=songNumber;
+              updatePlayerBarSong();
+
             };
 
 }
 var onHover = function(event){
   var songNumberCell = $(this).find('.song-item-number');// correct
-  var songNumber = songNumberCell.attr('data-song-number'); // tried to skip this step and use .text in the if statement directly
-    console.log (songNumber);
-
-
-       if (songNumber !== currentlyPlayingSong){   //tried to compare .text on both rather then just use another variable
-        songNumberCell.html(playButtonTemplate); //tried to assign value with = did not know I can use .html to assign value
+  var songNumber = parseInt(songNumberCell.attr('data-song-number')); // tried to skip this step and use .text in the if statement directly
+       if (songNumber !== currentlyPlayingSongNumber){   //tried to compare .text on both rather then just use another variable
+          songNumberCell.html(playButtonTemplate); //tried to assign value with = did not know I can use .html to assign value
         }
 };
 var offHover = function(event){
+  console.log("songNumber type is " + typeof songNumber + "\n and currentlyPlayingSongNumber type is " + typeof currentlyPlayingSongNumber);
   var songNumberCell = $(this).find('.song-item-number');
-  var songNumber = songNumberCell.attr('data-song-number');
-
-       if (songNumber !== currentlyPlayingSong){
+  var songNumber = parseInt(songNumberCell.attr('data-song-number'));
+       if (songNumber !== currentlyPlayingSongNumber){
           songNumberCell.html(songNumber);
        }
 };
-//#1
-$row.find('.song-item-number').click(clickHandler);
 
-//#2
+$row.find('.song-item-number').click(clickHandler);
 $row.hover(onHover, offHover);
-//#3
 return $row;
 
   };
 
   var setCurrentAlbum = function(album){
     // #1
-    var $albumTitle = $('.album-view-title');
-    var $albumArtist = $('.album-view-artist');
-    var $albumReleaseInfo =$('.album-view-release-info');
-    var $albumImage = $('.album-cover-art');
-    var $albumSongList = $('.album-view-song-list');
+      currentAlbum=album;
 
+      var $albumTitle = $('.album-view-title');
+      var $albumArtist = $('.album-view-artist');
+      var $albumReleaseInfo =$('.album-view-release-info');
+      var $albumImage = $('.album-cover-art');
+      var $albumSongList = $('.album-view-song-list');
 
 
     //#2
@@ -116,9 +160,24 @@ return $row;
     }
   };
 
-  $(document).ready()
+  var currentAlbum=null;
+  var currentlyPlayingSongNumber = null;
+  var currentSongFromAlbum = null;
+  var $previousButton = $('.main-controls .previous');
+  var $nextButton = $('.main-controls .next');
+  var currentAlbumArtist =null;
 
-      setCurrentAlbum(albumPicasso);
-      var playButtonTemplate='<a class="album-song-button"><span class="ion-play"></span></a>'
-      var pauseButtonTemplate='<a class="album-song-button"><span class="ion-pause"></span></a>'
-      var currentlyPlayingSong = null;
+
+  $(document).ready(function() {
+    setCurrentAlbum(albumPicasso);
+      //code below cannot find the function gives error in console
+      $previousButton.click(previousSong);
+      $nextButton.click(nextSong);
+
+
+
+  });
+  var playButtonTemplate='<a class="album-song-button"><span class="ion-play"></span></a>'
+  var pauseButtonTemplate='<a class="album-song-button"><span class="ion-pause"></span></a>'
+  var playerBarPlayButton='<span class="ion-play"></span>';
+  var playerBarPauseButton='<span class="ion-pause"></span>';
